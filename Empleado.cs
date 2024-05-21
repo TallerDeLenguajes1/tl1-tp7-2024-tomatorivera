@@ -6,7 +6,6 @@ public class Empleado {
 
     private string nombre;
     private string apellido;
-    private int edad;
     private DateTime fechaNacimiento;
     private char estadoCivil;
     private DateTime fechaIngreso;
@@ -35,10 +34,6 @@ public class Empleado {
         get => apellido;
         set => apellido = value;
     }
-    public int Edad {
-        get => edad;
-        set => edad = value;
-    }
     public DateTime FechaNacimiento {
         get => fechaNacimiento;
         set => fechaNacimiento = value;
@@ -66,8 +61,24 @@ public class Empleado {
         return diferencia.TotalDays / 360;
     }
 
+    public int calcularEdad() {
+        int edad = DateTime.Now.Year - fechaNacimiento.Year;
+        
+        if (fechaNacimiento.Month > DateTime.Now.Month)
+        {
+            edad++;
+        }
+        else if (fechaNacimiento.Month == DateTime.Now.Month)
+        {
+            if (fechaNacimiento.Day >= DateTime.Now.Day)
+                edad++;
+        }
+
+        return edad;
+    }
+
     public int aniosParaJubilarse() {
-        return 65 - this.edad;
+        return 65 - calcularEdad();
     }
 
     public double calcularSalario() {
@@ -96,6 +107,10 @@ public class Empleado {
             adicional += 150000;
 
         return adicional;
+    }
+
+    public override string ToString() {
+        return $"Empleado {nombre} {apellido} - Edad {calcularEdad()} - Fecha de nacimiento {fechaNacimiento} - Estado civil {estadoCivil.ToString().ToUpper()} - Fecha de ingreso {fechaIngreso} - Sueldo basico ${sueldoBasico} - Cargo {cargo}";
     }
 
 }
